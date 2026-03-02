@@ -1,5 +1,7 @@
 # README
 
+_Git + Trailer = gitrailer_
+
 This Windows PowerShell script automatically checks each Git repository within a specified root directory and notifies you with a Windows toast notification if there are updates on the remote repository.
 
 
@@ -7,7 +9,7 @@ This Windows PowerShell script automatically checks each Git repository within a
 
 Root directory to check can be specified with a commandline argument of [install.ps1](./install.ps1). Default is `$env:USERPROFILE | Join-Path -ChildPath "Personal\tools\repo"`.
 
-- [checkup.ps1](./checkup.ps1) will be copied to `$env:AppData\Roaming\git-status-toast`.
+- [checkup.ps1](./checkup.ps1) will be copied to `$env:AppData\Roaming\gitrailer`.
 - Scheduled task to run `pull.ps1` on logon and 13:00 will be registered.
 
 [uninstall.ps1](./uninstall.ps1) removes all data from PC.
