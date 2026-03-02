@@ -35,6 +35,9 @@ function Invoke-Toast{
         [string]$emojiCodepoint = "",
         [switch]$ephemeral
     )
+    if ($message.Length -lt 1) {
+        return
+    }
     if ($emojiCodepoint) {
         $title = $title + " " + [System.Char]::ConvertFromUtf32([System.Convert]::toInt32($emojiCodepoint, 16))
     }
