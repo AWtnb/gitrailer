@@ -65,6 +65,7 @@ if (-not (Get-Command git -ErrorAction SilentlyContinue).Source) {
 }
 
 $behind = @()
+$unpushed = @()
 $failed = @()
 
 Get-ChildItem -Path $reposDir -Directory | ForEach-Object {
@@ -94,6 +95,13 @@ Get-ChildItem -Path $reposDir -Directory | ForEach-Object {
                     Status = $status -replace ".+(\[behind)", '$1';
                 }
             }
+            elseif ($status -match "\[ahead \d+\]") {
+                "Repository '{0}' has unpushed commits!" -f $_.Name | Write-Host -ForegroundColor Red -NoNewline
+                $unpushed += [PSCustomObject]@{
+                    Repo   = $repoName;
+                    Status = $status -replace ".+(\[ahead)", '$1';
+                }
+            }
             else {
                 "up-to-date!" | Write-Host -ForegroundColor Cyan
             }
@@ -120,12 +128,15 @@ if ($failed.Count -gt 0) {
 }
 
 
-if ($behind.Count -gt 0) {
-    ($behind | ForEach-Object {
-        return "``{0}`` {1}" -f $_.Repo, $_.Status
-    }) -join ", " | Invoke-Toast -title "Update available!" -emojiCodepoint "1F9F2"
-}
-else {
+($behind | ForEach-Object {
+    return "``{0}`` {1}" -f $_.Repo, $_.Status
+}) -join ", " | Invoke-Toast -title "Update available!" -emojiCodepoint "1F9F2"
+
+($unpushed | ForEach-Object {
+    return "``{0}`` {1}" -f $_.Repo, $_.Status
+}) -join ", " | Invoke-Toast -title "Update available!" -emojiCodepoint "23F0"
+
+if ($behind.Count -eq 0 -and $unpushed.Count -eq 0) {
     "`nAll repos are up-to-date!" | Write-Host -ForegroundColor Black -BackgroundColor White
 }
 

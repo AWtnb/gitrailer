@@ -1,7 +1,7 @@
 {
-    "taskPath": "Git-behind-checker",
-    "taskName": {
-        "startup": "startup",
-        "daily": "daily"
-    }
+  "taskPath": "\\Gitrailer\\",
+  "taskName": {
+    "startup": "startup",
+    "daily": "daily"
+  }
 }
