@@ -95,8 +95,8 @@ Get-ChildItem -Path $reposDir -Directory | ForEach-Object {
                     Status = $status -replace ".+(\[behind)", '$1';
                 }
             }
-            elseif ($status -match "\[ahead \d+\]") {
-                "Repository '{0}' has unpushed commits!" -f $_.Name | Write-Host -ForegroundColor Red -NoNewline
+            elseif ($status -match "\[ahead\s+\d+\]") {
+                "some commits remain unpushed." | Write-Host -ForegroundColor Red
                 $unpushed += [PSCustomObject]@{
                     Repo   = $repoName;
                     Status = $status -replace ".+(\[ahead)", '$1';
@@ -134,9 +134,9 @@ if ($failed.Count -gt 0) {
 
 ($unpushed | ForEach-Object {
     return "``{0}`` {1}" -f $_.Repo, $_.Status
-}) -join ", " | Invoke-Toast -title "Update available!" -emojiCodepoint "23F0"
+}) -join ", " | Invoke-Toast -title "Some commits remain unpushed!" -emojiCodepoint "23F0"
 
-if ($behind.Count -eq 0 -and $unpushed.Count -eq 0) {
+if (($behind.Count + $unpushed.Count) -eq 0) {
     "`nAll repos are up-to-date!" | Write-Host -ForegroundColor Black -BackgroundColor White
 }
 
